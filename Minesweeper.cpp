@@ -4,6 +4,21 @@
 #include <iomanip>  
 #include <time.h>
 
+/**
+*
+* Solution to course project # <номер на вариант>
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2022/2023
+*
+* @author <Анелия Огнянова Кандиларова>
+* @idnumber <5MI0600230>
+* @compiler <VC>
+*
+* <Minesweeper all funcionalities>
+*
+*/
+
 using namespace std;
 
 //dynamic matrix functions
