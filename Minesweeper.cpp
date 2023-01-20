@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <cstdlib>
 #include <stdlib.h>
 #include <iomanip>  
@@ -11,11 +11,11 @@
 * Faculty of Mathematics and Informatics of Sofia University
 * Winter semester 2022/2023
 *
-* @author <Анелия Огнянова Кандиларова>
+* @author <Aneliya Kadilarova>
 * @idnumber <5MI0600230>
 * @compiler <VC>
 *
-* <Minesweeper all funcionalities>
+* <Minesweeper - all funcionalities>
 *
 */
 
@@ -627,101 +627,121 @@ bool isCountOfMarkedReached(char** playBoard, int sizeOfField, int numberOfMines
     }
 }
 
+//continue playing
+bool doYouWantToPlayMore(char userAnswer) {
+    if (userAnswer == 'y') {
+        return true;
+    }
+    else if (userAnswer == 'n') {
+        return false;
+    }
+}
 
 int main() {
 
-    //choose difficulty level
-    cout << "----<<< MINESWEEPER GAME >>>----" << endl << endl;
-    cout << ">> Choose difficulty level from 3 to 10." << endl << endl;
-    int sizeOfField;
-    cout << "Difficulty level: ";
-    cin >> sizeOfField;
-
-    //invalid input case
-    while (sizeOfField < 3 || sizeOfField > 10) {
-        cout << endl;
-        cout << "----You entered wrong input!----" << endl;
-        cout << "Try again. >>" << endl << endl;
+    while (true) {
+        //choose difficulty level
+        cout << "----<<< MINESWEEPER GAME >>>----" << endl << endl;
         cout << ">> Choose difficulty level from 3 to 10." << endl << endl;
+        int sizeOfField;
         cout << "Difficulty level: ";
         cin >> sizeOfField;
-    }
 
-    //choose number of mines
-    cout << endl;
-    cout << ">> Now, choose number of hidden mines!" << endl << endl;
-    int maxNumberOfMines = 3 * sizeOfField;
-    int minesInput;
-    cout << "Enter number of hidden mines: ";
-    cin >> minesInput;
+        //invalid input case
+        while (sizeOfField < 3 || sizeOfField > 10) {
+            cout << endl;
+            cout << "----You entered wrong input!----" << endl;
+            cout << "Try again. >>" << endl << endl;
+            cout << ">> Choose difficulty level from 3 to 10." << endl << endl;
+            cout << "Difficulty level: ";
+            cin >> sizeOfField;
+        }
 
-    //invalid number of mines case
-    while (minesInput < 1 || minesInput > maxNumberOfMines) {
+        //choose number of mines
         cout << endl;
-        cout << "----You entered unexisting number of mines!----" << endl;
-        cout << "Try again. >>" << endl << endl;
-        cout << ">> Now, choose angain number of hidden mines!" << endl << endl;
+        cout << ">> Now, choose number of hidden mines!" << endl << endl;
+        int maxNumberOfMines = 3 * sizeOfField;
+        int minesInput;
         cout << "Enter number of hidden mines: ";
         cin >> minesInput;
-    }
-
-    //create hiddenGameBoard and gameBoard
-    char** hiddenGameBoard = createTable(sizeOfField);
-    char** gameBoard = createTable(sizeOfField);
-    generateGameBoard(hiddenGameBoard, '_', sizeOfField);
-    generateGameBoard(gameBoard, '_', sizeOfField);
-
-    //print gameBoard
-    printMatrix(gameBoard, sizeOfField);
-
-    //generate random mines on hidden board
-    generateRandomMines(hiddenGameBoard, sizeOfField, minesInput);
-    
-    //put count of surrounding mines on hidden board
-    putCountOfMines(hiddenGameBoard, sizeOfField);
-
-    bool openedSquares = false;
-    bool markedSquares = false;
-
-    //comands input:
-    while(true) {
-        int xCoordinate = 0;
-        int yCoordinate = 0;
-        char command;
-
-        cout << endl << endl;
-        cout << ">> PRESS: " << endl;     
-        cout << "(o) to OPEN a square, " << endl << "(m) to MARK as suspected mine, "
-            << endl << "(u) to UNMARK suspected mine. " << endl;
-        cout << "Enter command: " << endl;
-        cin >> command;
-        //command validation
-        while (command != 'o' && command != 'm' && command != 'u') {
-            cout << "----You entered wrong command!----" << endl;
-            cout << "Try again with another command >> " << endl;
-            cin >> command;
-        }   
-
-        cout << endl << endl << "Enter coordinates to open square: " << endl << endl;
-        cout << "x: ";
-        cin >> xCoordinate;
-
         cout << endl;
 
-        cout << "y: ";
-        cin >> yCoordinate;
-
-        //'x' and 'y' validation
-        if (!areCoordValid(xCoordinate, yCoordinate, sizeOfField)) {
-            cout << endl << "----Invalid coordinates!----" << endl << endl;
-            cout << "Try to enter command and coordinates again >> " << endl << endl;
+        //invalid number of mines case
+        while (minesInput < 1 || minesInput > maxNumberOfMines) {
+            cout << endl;
+            cout << "----You entered unexisting number of mines!----" << endl;
+            cout << "Try again. >>" << endl << endl;
+            cout << ">> Now, choose angain number of hidden mines!" << endl << endl;
+            cout << "Enter number of hidden mines: ";
+            cin >> minesInput;
+            cout << endl;
         }
-        
+
+        //create hiddenGameBoard and gameBoard
+        char** hiddenGameBoard = createTable(sizeOfField);
+        char** gameBoard = createTable(sizeOfField);
+        generateGameBoard(hiddenGameBoard, '_', sizeOfField);
+        generateGameBoard(gameBoard, '_', sizeOfField);
+
+        //print gameBoard
+        printMatrix(gameBoard, sizeOfField);
+
+        //generate random mines on hidden board
+        generateRandomMines(hiddenGameBoard, sizeOfField, minesInput);
+
+        //put count of surrounding mines on hidden board
+        putCountOfMines(hiddenGameBoard, sizeOfField);
+
+        bool openedSquares = false;
+        bool markedSquares = false;
+        bool doYouWantToPlayAgain = false;
+
+        //comands input:
+        while (true) {
+            int xCoordinate = 0;
+            int yCoordinate = 0;
+            char command;
+
+            cout << endl << endl;
+            cout << ">> PRESS: " << endl;
+            cout << "(o) to OPEN a square, " << endl << "(m) to MARK as suspected mine, "
+                << endl << "(u) to UNMARK suspected mine. " << endl;
+            cout << endl << "HINT: Command should be olny ONE letter!" << endl << "Enter command: >>" << endl;
+            cin >> command;
+            //command validation
+            while (command != 'o' && command != 'm' && command != 'u') {
+                cout << "----You entered wrong command!----" << endl;
+                cout << "Try again with another command >> " << endl;
+                cin >> command;
+            }
+
+            cout << endl << endl << "Enter coordinates to open square: " << endl << endl;
+            cout << "row: ";
+            cin >> xCoordinate;
+
+            cout << endl;
+
+            cout << "col: ";
+            cin >> yCoordinate;
+
+            //'x' and 'y' validation
+            if (!areCoordValid(xCoordinate, yCoordinate, sizeOfField)) {
+                cout << endl << "----Invalid coordinates!----" << endl << endl;
+                cout << "Try to enter command and coordinates again >> " << endl << endl;
+                continue;
+            }
+            else if (isItRevealed(gameBoard, xCoordinate, yCoordinate)) {
+                cout << endl << ">>It has already been revealed!" << endl << endl;
+                cout << "Try to enter command and coordinates again >> " << endl << endl;
+                continue;
+            }
+
             //open square command
             if (command == 'o') {
                 if (checkForMine(hiddenGameBoard, sizeOfField, xCoordinate, yCoordinate)) {
                     for (int row = 0; row < sizeOfField; row++) {
                         for (int col = 0; col < sizeOfField; col++) {
+                            //game over case
                             if (checkForMine(hiddenGameBoard, sizeOfField, row, col)) {
                                 gameBoard[row][col] = hiddenGameBoard[row][col];
                             }
@@ -729,10 +749,30 @@ int main() {
                     }
                     printMatrix(gameBoard, sizeOfField);
                     cout << endl << "---- GAME OVER! ): ----" << endl;
+
+                    char userAnswer;
+                    cout << endl << "Do you want to play again? " << endl;
+                    cout << ">>PRESS " << endl << "(y) for 'yes' " << endl << "(n) for 'no' " << endl;
+                    cout << ">> ";
+                    cin >> userAnswer;
+                    cout << endl;
+                    if (doYouWantToPlayMore(userAnswer)) {
+                        doYouWantToPlayAgain = true;
+                        break;
+                    }
+                    else if (!doYouWantToPlayMore(userAnswer)) {
+                        doYouWantToPlayAgain = false;
+                        break;
+                    }                   
+
                     break;
                 }
                 openCommand(gameBoard, hiddenGameBoard, sizeOfField, command, xCoordinate, yCoordinate);
                 printMatrix(gameBoard, sizeOfField);
+
+                cout << endl << "-> Number of revealed squares >> " << countOfOpenedSquaresByTheUser(gameBoard, sizeOfField) << endl;
+                int leftToOpen = ((sizeOfField * sizeOfField) - (countOfOpenedSquaresByTheUser(gameBoard, sizeOfField)) - minesInput);
+                cout << endl << leftToOpen << " more left to reveal. " << endl;
 
                 //check if all squares are opened
                 if (isCountOfOpenedSquaresReached(gameBoard, sizeOfField, minesInput)) {
@@ -744,6 +784,11 @@ int main() {
             else if (command == 'm') {
                 markCommand(gameBoard, sizeOfField, command, xCoordinate, yCoordinate);
                 printMatrix(gameBoard, sizeOfField);
+
+                cout << endl << "-> Count of marked squares >> " << countOfMarked(gameBoard, sizeOfField, xCoordinate, yCoordinate) << endl;;
+                int leftToMark = minesInput - countOfMarked(gameBoard, sizeOfField, xCoordinate, yCoordinate);
+                cout << endl << leftToMark << " more left to mark. " << endl;
+
                 //check if all mines are marked
                 if (isCountOfMarkedReached(gameBoard, sizeOfField, minesInput, xCoordinate, yCoordinate)) {
                     markedSquares = true;
@@ -756,12 +801,37 @@ int main() {
                 printMatrix(gameBoard, sizeOfField);
             }
 
+            //win case
             if (openedSquares == true && markedSquares == true) {
-                cout << endl << " ----<< YOU WIN!!! >>---- " << endl;
-                break;
+                if (markedSquares == true && openedSquares == true) {
+                    cout << endl << " ----<< YOU WIN!!! >>---- " << endl << endl;
+
+                    char userAnswer;
+                    cout << endl << "Do you want to play again? " << endl;
+                    cout << ">>PRESS " << endl << "(y) for 'yes' " << endl << "(n) for 'no' " << endl;
+                    cout << ">> ";
+                    cin >> userAnswer;
+                    cout << endl;
+                    if (doYouWantToPlayMore(userAnswer)) {
+                        doYouWantToPlayAgain = true;
+                        break;
+                    }
+                    else if (!doYouWantToPlayMore(userAnswer)) {
+                        doYouWantToPlayAgain = false;
+                        break;
+                    }
+                }
             }
         }
         //delete both boards
         deleteMatrix(gameBoard, sizeOfField);
         deleteMatrix(hiddenGameBoard, sizeOfField);
+        if (!doYouWantToPlayAgain) {
+            break;
+        }
+        else {
+            continue;
+        }
+    }
 }
+
